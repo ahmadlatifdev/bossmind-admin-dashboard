@@ -3,11 +3,582 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>BossMind Admin Dashboard — 3 Projects</title>
+  <meta name="color-scheme" content="dark" />
+  <title>BossMind Admin Dashboard</title>
+  <meta name="description" content="BossMind Admin Dashboard — Control Center for Builder, Video Generator, and Stock systems." />
   <link rel="stylesheet" href="./styles.css" />
 </head>
+
 <body>
-  <div id="app"></div>
-  <script type="module" src="./app.js"></script>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="app-shell" id="appShell">
+    <!-- Sidebar -->
+    <aside class="sidebar" aria-label="Primary">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">BM</div>
+        <div class="brand-text">
+          <div class="brand-title">BossMind</div>
+          <div class="brand-sub">Admin Dashboard</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Navigation">
+        <button class="nav-item is-active" data-route="overview" type="button">
+          <span class="nav-dot" aria-hidden="true"></span>
+          <span>Overview</span>
+        </button>
+
+        <div class="nav-section">
+          <div class="nav-section-title">Projects</div>
+
+          <button class="nav-item" data-route="project-builder" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>AI Builder</span>
+          </button>
+
+          <button class="nav-item" data-route="project-video" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>AI Video Generator</span>
+          </button>
+
+          <button class="nav-item" data-route="project-stock" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>AI Stocks</span>
+          </button>
+        </div>
+
+        <div class="nav-section">
+          <div class="nav-section-title">System</div>
+
+          <button class="nav-item" data-route="health" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>Health Check</span>
+          </button>
+
+          <button class="nav-item" data-route="switches" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>Switch Control</span>
+          </button>
+
+          <button class="nav-item" data-route="logs" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>Logs</span>
+          </button>
+
+          <button class="nav-item" data-route="settings" type="button">
+            <span class="nav-dot" aria-hidden="true"></span>
+            <span>Settings</span>
+          </button>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="chip">
+          <span class="chip-key">Mode</span>
+          <span class="chip-val" id="modeLabel">Admin</span>
+        </div>
+
+        <button class="btn btn-ghost w-full" type="button" id="btnLockUI">
+          Lock UI
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="main-area">
+      <!-- Topbar -->
+      <header class="topbar" aria-label="Top bar">
+        <div class="topbar-left">
+          <button class="icon-btn hide-desktop" type="button" id="btnToggleSidebar" aria-label="Open menu">
+            ☰
+          </button>
+
+          <div class="breadcrumbs" aria-label="Breadcrumb">
+            <span class="crumb">BossMind</span>
+            <span class="crumb-sep" aria-hidden="true">/</span>
+            <span class="crumb is-current" id="crumbCurrent">Overview</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <div class="status-pill" id="globalStatus" role="status" aria-live="polite">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span class="status-text" id="globalStatusText">Ready</span>
+          </div>
+
+          <button class="btn btn-secondary" type="button" id="btnRunHealth">
+            Run Health Check
+          </button>
+
+          <button class="btn btn-primary" type="button" id="btnBackupAll">
+            Backup All Systems
+          </button>
+        </div>
+      </header>
+
+      <main id="main" class="content" tabindex="-1">
+        <!-- OVERVIEW -->
+        <section class="view is-active" data-view="overview" aria-label="Overview">
+          <div class="hero">
+            <div class="hero-title">BossMind Control Center</div>
+            <div class="hero-sub">
+              Unified dashboard for <b>AI Builder</b>, <b>AI Video Generator</b>, and <b>AI Stocks</b>.
+            </div>
+
+            <div class="hero-actions">
+              <button class="btn btn-secondary" type="button" data-action="open-switches">Open Switch Control</button>
+              <button class="btn btn-ghost" type="button" data-action="open-logs">View Logs</button>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <!-- Builder Card -->
+            <article class="card project-card" data-project="builder">
+              <div class="card-head">
+                <div class="card-title">
+                  <span class="badge">Project</span>
+                  AI Builder
+                </div>
+                <div class="mini-status" role="status" aria-live="polite">
+                  <span class="mini-dot" aria-hidden="true"></span>
+                  <span class="mini-text" data-bind="builder.statusText">Unknown</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row">
+                    <span class="k">Repo</span>
+                    <span class="v mono" data-bind="builder.repo">ahmadlatifdev/elegancyart-ai</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Runtime</span>
+                    <span class="v" data-bind="builder.runtime">Not connected</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Last Check</span>
+                    <span class="v" data-bind="builder.lastCheck">—</span>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <button class="btn btn-secondary" type="button" data-action="open-project" data-target="project-builder">
+                    Open
+                  </button>
+                  <button class="btn btn-ghost" type="button" data-action="project-health" data-project="builder">
+                    Check
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Video Card -->
+            <article class="card project-card" data-project="video">
+              <div class="card-head">
+                <div class="card-title">
+                  <span class="badge">Project</span>
+                  AI Video Generator
+                </div>
+                <div class="mini-status" role="status" aria-live="polite">
+                  <span class="mini-dot" aria-hidden="true"></span>
+                  <span class="mini-text" data-bind="video.statusText">Unknown</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row">
+                    <span class="k">Repo</span>
+                    <span class="v mono" data-bind="video.repo">ahmadlatifdev/ai-video-generator</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Runtime</span>
+                    <span class="v" data-bind="video.runtime">Not connected</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Last Check</span>
+                    <span class="v" data-bind="video.lastCheck">—</span>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <button class="btn btn-secondary" type="button" data-action="open-project" data-target="project-video">
+                    Open
+                  </button>
+                  <button class="btn btn-ghost" type="button" data-action="project-health" data-project="video">
+                    Check
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <!-- Stock Card -->
+            <article class="card project-card" data-project="stock">
+              <div class="card-head">
+                <div class="card-title">
+                  <span class="badge">Project</span>
+                  AI Stocks
+                </div>
+                <div class="mini-status" role="status" aria-live="polite">
+                  <span class="mini-dot" aria-hidden="true"></span>
+                  <span class="mini-text" data-bind="stock.statusText">Unknown</span>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row">
+                    <span class="k">Repo</span>
+                    <span class="v mono" data-bind="stock.repo">ahmadlatifdev/bossmind-orchestrator</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Runtime</span>
+                    <span class="v" data-bind="stock.runtime">Not connected</span>
+                  </div>
+                  <div class="kv-row">
+                    <span class="k">Last Check</span>
+                    <span class="v" data-bind="stock.lastCheck">—</span>
+                  </div>
+                </div>
+
+                <div class="card-actions">
+                  <button class="btn btn-secondary" type="button" data-action="open-project" data-target="project-stock">
+                    Open
+                  </button>
+                  <button class="btn btn-ghost" type="button" data-action="project-health" data-project="stock">
+                    Check
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid-2 mt-16">
+            <section class="card">
+              <div class="card-head">
+                <div class="card-title">Quick Actions</div>
+              </div>
+              <div class="card-body">
+                <div class="stack">
+                  <button class="btn btn-secondary w-full" type="button" data-action="run-health">
+                    Run Global Health Check
+                  </button>
+                  <button class="btn btn-primary w-full" type="button" data-action="backup-all">
+                    Backup All Systems Now
+                  </button>
+                  <button class="btn btn-ghost w-full" type="button" data-action="open-logs">
+                    Open Logs
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head">
+                <div class="card-title">System Summary</div>
+              </div>
+              <div class="card-body">
+                <div class="summary-grid">
+                  <div class="summary-item">
+                    <div class="summary-k">Maintenance</div>
+                    <div class="summary-v" id="maintenanceLabel">OFF</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-k">Backups</div>
+                    <div class="summary-v" id="backupLabel">Not configured</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-k">Orchestrator</div>
+                    <div class="summary-v" id="orchestratorLabel">Not connected</div>
+                  </div>
+                  <div class="summary-item">
+                    <div class="summary-k">Last Activity</div>
+                    <div class="summary-v" id="activityLabel">—</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- PROJECT: BUILDER -->
+        <section class="view" data-view="project-builder" aria-label="AI Builder">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">AI Builder</h1>
+              <p class="muted">Manage deployment, switches, health checks, and logs for the Builder system.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="project-health" data-project="builder">Health Check</button>
+              <button class="btn btn-primary" type="button" data-action="project-backup" data-project="builder">Backup</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <div class="card-head"><div class="card-title">Connection</div></div>
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row"><span class="k">Repo</span><span class="v mono">ahmadlatifdev/elegancyart-ai</span></div>
+                  <div class="kv-row"><span class="k">API Base</span><span class="v mono" data-bind="builder.apiBase">Not set</span></div>
+                  <div class="kv-row"><span class="k">Status</span><span class="v" data-bind="builder.statusText">Unknown</span></div>
+                </div>
+                <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-settings">Configure API</button>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head"><div class="card-title">Switches</div></div>
+              <div class="card-body">
+                <div class="switch-list" data-switch-scope="builder"></div>
+                <button class="btn btn-secondary w-full mt-12" type="button" data-action="open-switches">Open Switch Control</button>
+              </div>
+            </section>
+          </div>
+
+          <section class="card mt-16">
+            <div class="card-head"><div class="card-title">Recent Logs</div></div>
+            <div class="card-body">
+              <div class="logbox" data-log-scope="builder"></div>
+              <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-logs">View All Logs</button>
+            </div>
+          </section>
+        </section>
+
+        <!-- PROJECT: VIDEO -->
+        <section class="view" data-view="project-video" aria-label="AI Video Generator">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">AI Video Generator</h1>
+              <p class="muted">Monitor queue, publishing, backups, and automation stability.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="project-health" data-project="video">Health Check</button>
+              <button class="btn btn-primary" type="button" data-action="project-backup" data-project="video">Backup</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <div class="card-head"><div class="card-title">Connection</div></div>
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row"><span class="k">Repo</span><span class="v mono">ahmadlatifdev/ai-video-generator</span></div>
+                  <div class="kv-row"><span class="k">API Base</span><span class="v mono" data-bind="video.apiBase">Not set</span></div>
+                  <div class="kv-row"><span class="k">Status</span><span class="v" data-bind="video.statusText">Unknown</span></div>
+                </div>
+                <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-settings">Configure API</button>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head"><div class="card-title">Switches</div></div>
+              <div class="card-body">
+                <div class="switch-list" data-switch-scope="video"></div>
+                <button class="btn btn-secondary w-full mt-12" type="button" data-action="open-switches">Open Switch Control</button>
+              </div>
+            </section>
+          </div>
+
+          <section class="card mt-16">
+            <div class="card-head"><div class="card-title">Recent Logs</div></div>
+            <div class="card-body">
+              <div class="logbox" data-log-scope="video"></div>
+              <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-logs">View All Logs</button>
+            </div>
+          </section>
+        </section>
+
+        <!-- PROJECT: STOCK -->
+        <section class="view" data-view="project-stock" aria-label="AI Stocks">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">AI Stocks</h1>
+              <p class="muted">System health and controls for the Stocks project (no dev mix).</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="project-health" data-project="stock">Health Check</button>
+              <button class="btn btn-primary" type="button" data-action="project-backup" data-project="stock">Backup</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <div class="card-head"><div class="card-title">Connection</div></div>
+              <div class="card-body">
+                <div class="kv">
+                  <div class="kv-row"><span class="k">Repo</span><span class="v mono">ahmadlatifdev/bossmind-orchestrator</span></div>
+                  <div class="kv-row"><span class="k">API Base</span><span class="v mono" data-bind="stock.apiBase">Not set</span></div>
+                  <div class="kv-row"><span class="k">Status</span><span class="v" data-bind="stock.statusText">Unknown</span></div>
+                </div>
+                <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-settings">Configure API</button>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head"><div class="card-title">Switches</div></div>
+              <div class="card-body">
+                <div class="switch-list" data-switch-scope="stock"></div>
+                <button class="btn btn-secondary w-full mt-12" type="button" data-action="open-switches">Open Switch Control</button>
+              </div>
+            </section>
+          </div>
+
+          <section class="card mt-16">
+            <div class="card-head"><div class="card-title">Recent Logs</div></div>
+            <div class="card-body">
+              <div class="logbox" data-log-scope="stock"></div>
+              <button class="btn btn-ghost w-full mt-12" type="button" data-action="open-logs">View All Logs</button>
+            </div>
+          </section>
+        </section>
+
+        <!-- HEALTH -->
+        <section class="view" data-view="health" aria-label="Health Check">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">Health Check</h1>
+              <p class="muted">Run checks across all systems and save results to logs.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="run-health">Run Now</button>
+              <button class="btn btn-ghost" type="button" data-action="clear-health">Clear</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="card-head"><div class="card-title">Results</div></div>
+            <div class="card-body">
+              <div class="health-grid" id="healthGrid"></div>
+            </div>
+          </section>
+        </section>
+
+        <!-- SWITCHES -->
+        <section class="view" data-view="switches" aria-label="Switch Control">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">Switch Control</h1>
+              <p class="muted">Maintenance mode and feature toggles (per system + global).</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="save-switches">Save</button>
+              <button class="btn btn-ghost" type="button" data-action="reset-switches">Reset</button>
+            </div>
+          </div>
+
+          <div class="grid-2">
+            <section class="card">
+              <div class="card-head"><div class="card-title">Global</div></div>
+              <div class="card-body">
+                <div class="switch-list" data-switch-scope="global"></div>
+              </div>
+            </section>
+
+            <section class="card">
+              <div class="card-head"><div class="card-title">Projects</div></div>
+              <div class="card-body">
+                <div class="tabs" role="tablist" aria-label="Switch scopes">
+                  <button class="tab is-active" type="button" data-tab="builder" role="tab" aria-selected="true">Builder</button>
+                  <button class="tab" type="button" data-tab="video" role="tab" aria-selected="false">Video</button>
+                  <button class="tab" type="button" data-tab="stock" role="tab" aria-selected="false">Stocks</button>
+                </div>
+                <div class="tabpanes">
+                  <div class="tabpane is-active" data-pane="builder"><div class="switch-list" data-switch-scope="builder"></div></div>
+                  <div class="tabpane" data-pane="video"><div class="switch-list" data-switch-scope="video"></div></div>
+                  <div class="tabpane" data-pane="stock"><div class="switch-list" data-switch-scope="stock"></div></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- LOGS -->
+        <section class="view" data-view="logs" aria-label="Logs">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">Logs</h1>
+              <p class="muted">All activity logs from health checks, backups, and switch changes.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-ghost" type="button" data-action="export-logs">Export</button>
+              <button class="btn btn-secondary" type="button" data-action="clear-logs">Clear</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="card-head"><div class="card-title">Log Stream</div></div>
+            <div class="card-body">
+              <div class="logbox" id="logAll"></div>
+            </div>
+          </section>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="view" data-view="settings" aria-label="Settings">
+          <div class="view-head">
+            <div>
+              <h1 class="h1">Settings</h1>
+              <p class="muted">Configure API base URLs and dashboard behavior.</p>
+            </div>
+            <div class="view-actions">
+              <button class="btn btn-secondary" type="button" data-action="save-settings">Save</button>
+              <button class="btn btn-ghost" type="button" data-action="reset-settings">Reset</button>
+            </div>
+          </div>
+
+          <section class="card">
+            <div class="card-head"><div class="card-title">API Configuration</div></div>
+            <div class="card-body">
+              <div class="form">
+                <label class="field">
+                  <span class="label">Builder API Base URL</span>
+                  <input class="input mono" id="builderApiBase" placeholder="https://your-builder-api.example.com" />
+                </label>
+
+                <label class="field">
+                  <span class="label">Video Generator API Base URL</span>
+                  <input class="input mono" id="videoApiBase" placeholder="https://your-video-api.example.com" />
+                </label>
+
+                <label class="field">
+                  <span class="label">Stocks API Base URL</span>
+                  <input class="input mono" id="stockApiBase" placeholder="https://your-stocks-api.example.com" />
+                </label>
+
+                <div class="note">
+                  Tip: This dashboard runs as a static site. API URLs are stored locally in your browser and used by the dashboard to call BossMind endpoints.
+                </div>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="muted">BossMind Admin Dashboard</div>
+        <div class="muted mono" id="buildStamp">Build: local</div>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-action="close-modal" aria-hidden="true"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <div class="modal-title" id="modalTitle">Confirm</div>
+        <button class="icon-btn" type="button" data-action="close-modal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+  <script src="./app.js" defer></script>
 </body>
 </html>
